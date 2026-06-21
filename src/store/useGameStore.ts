@@ -21,14 +21,34 @@ export const useGameStore = create<GameStore>((set) => ({
   setCurrentLevel: (levelId) => set({ currentLevelId: levelId }),
 
   addPlacedProduct: (product) =>
-    set((state) => ({
-      placedProducts: [...state.placedProducts, product],
-    })),
+    set((state) => {
+      const layerCount = state.placedProducts.filter(
+        (p) => p.shelfLayerId === product.shelfLayerId
+      ).length;
+      const safeProduct = { ...product, position: layerCount };
+      return {
+        placedProducts: [...state.placedProducts, safeProduct],
+      };
+    }),
 
   removePlacedProduct: (placedId) =>
-    set((state) => ({
-      placedProducts: state.placedProducts.filter((p) => p.id !== placedId),
-    })),
+    set((state) => {
+      const target = state.placedProducts.find((p) => p.id === placedId);
+      if (!target) return state;
+
+      const { shelfLayerId, position: removedPosition } = target;
+
+      const newProducts = state.placedProducts
+        .filter((p) => p.id !== placedId)
+        .map((p) => {
+          if (p.shelfLayerId === shelfLayerId && p.position > removedPosition) {
+            return { ...p, position: p.position - 1 };
+          }
+          return p;
+        });
+
+      return { placedProducts: newProducts };
+    }),
 
   movePlacedProduct: (placedId, newLayerId, newPosition) =>
     set((state) => ({
