@@ -1,14 +1,48 @@
-import type { ShelfLayer, Product } from '@/types';
+import { useCallback } from 'react';
+import { useGameStore } from '@/store/useGameStore';
+import type { ShelfLayer as ShelfLayerType, Product } from '@/types';
 import ShelfLayerComponent from './ShelfLayer';
 
 interface ShelfProps {
-  layers: ShelfLayer[];
+  layers: ShelfLayerType[];
   products: Product[];
   title?: string;
+  disabled?: boolean;
+  onDrop: (
+    data: unknown,
+    type: string,
+    layerId: string,
+    position: number,
+    targetPlacedId?: string
+  ) => void;
+  onRemove: (placedId: string) => void;
 }
 
-export default function Shelf({ layers, products, title = '实训货架' }: ShelfProps) {
-  const sortedLayers = [...layers].sort((a, b) => b.level - a.level);
+export default function Shelf({
+  layers,
+  products,
+  title = '实训货架',
+  disabled = false,
+  onDrop,
+  onRemove,
+}: ShelfProps) {
+  const { getEffectiveLayers } = useGameStore();
+
+  const effectiveLayers = getEffectiveLayers(layers);
+  const sortedLayers = [...effectiveLayers].sort((a, b) => b.level - a.level);
+
+  const handleLayerDrop = useCallback(
+    (
+      layerId: string,
+      data: unknown,
+      type: string,
+      position: number,
+      targetPlacedId?: string
+    ) => {
+      onDrop(data, type, layerId, position, targetPlacedId);
+    },
+    [onDrop]
+  );
 
   return (
     <div className="bg-gradient-to-b from-amber-700 to-amber-900 p-4 rounded-2xl shadow-2xl">
@@ -20,7 +54,15 @@ export default function Shelf({ layers, products, title = '实训货架' }: Shel
       <div className="bg-gradient-to-b from-amber-800 to-amber-950 p-3 rounded-xl shadow-inner">
         {sortedLayers.map((layer, index) => (
           <div key={layer.id}>
-            <ShelfLayerComponent layer={layer} products={products} />
+            <ShelfLayerComponent
+              layer={layer}
+              products={products}
+              disabled={disabled}
+              onDrop={(data, type, position, targetPlacedId) =>
+                handleLayerDrop(layer.id, data, type, position, targetPlacedId)
+              }
+              onRemove={onRemove}
+            />
             {index < sortedLayers.length - 1 && (
               <div className="h-3 bg-gradient-to-b from-amber-900 via-amber-950 to-amber-900 mx-2 rounded-sm" />
             )}

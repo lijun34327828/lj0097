@@ -8,6 +8,9 @@ interface ItemStore {
   addItem: (id: string, count?: number) => void;
   useItem: (id: string) => boolean;
   hasItem: (id: string) => boolean;
+  setItemRemaining: (id: string, remaining: number) => void;
+  restoreFromPersisted: (itemRemaining: Record<string, number>) => void;
+  resetAll: () => void;
 }
 
 export const useItemStore = create<ItemStore>((set, get) => ({
@@ -41,4 +44,21 @@ export const useItemStore = create<ItemStore>((set, get) => ({
     const item = get().items.find((i) => i.id === id);
     return item ? item.remaining > 0 : false;
   },
+
+  setItemRemaining: (id, remaining) =>
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.id === id ? { ...item, remaining: Math.max(0, remaining) } : item
+      ),
+    })),
+
+  restoreFromPersisted: (itemRemaining) =>
+    set((state) => ({
+      items: state.items.map((item) => ({
+        ...item,
+        remaining: itemRemaining[item.id] ?? item.remaining,
+      })),
+    })),
+
+  resetAll: () => set({ items: initialItems }),
 }));

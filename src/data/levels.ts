@@ -8,6 +8,7 @@ export const levels: Level[] = [
     difficulty: 1,
     unlocked: true,
     completed: false,
+    timeLimit: 180,
     products: [
       { id: 'p1', name: '薯片大包', emoji: '🍟', weight: 150, isHot: true, isHeavy: false, category: 'snacks', maxStock: 5 },
       { id: 'p3', name: '巧克力棒', emoji: '🍫', weight: 50, isHot: true, isHeavy: false, category: 'snacks', maxStock: 8 },
@@ -32,6 +33,7 @@ export const levels: Level[] = [
     difficulty: 2,
     unlocked: false,
     completed: false,
+    timeLimit: 240,
     products: [
       { id: 'p2', name: '可乐2L装', emoji: '🥤', weight: 2100, isHot: false, isHeavy: true, category: 'drinks', maxStock: 3 },
       { id: 'p4', name: '矿泉水', emoji: '💧', weight: 550, isHot: false, isHeavy: true, category: 'drinks', maxStock: 6 },
@@ -58,6 +60,7 @@ export const levels: Level[] = [
     difficulty: 2,
     unlocked: false,
     completed: false,
+    timeLimit: 240,
     products: [
       { id: 'p1', name: '薯片大包', emoji: '🍟', weight: 150, isHot: true, isHeavy: false, category: 'snacks', maxStock: 5 },
       { id: 'p3', name: '巧克力棒', emoji: '🍫', weight: 50, isHot: true, isHeavy: false, category: 'snacks', maxStock: 8 },
@@ -85,6 +88,7 @@ export const levels: Level[] = [
     difficulty: 2,
     unlocked: false,
     completed: false,
+    timeLimit: 240,
     products: [
       { id: 'p1', name: '薯片大包', emoji: '🍟', weight: 150, isHot: true, isHeavy: false, category: 'snacks', maxStock: 3 },
       { id: 'p3', name: '巧克力棒', emoji: '🍫', weight: 50, isHot: true, isHeavy: false, category: 'snacks', maxStock: 5 },
@@ -112,6 +116,7 @@ export const levels: Level[] = [
     difficulty: 3,
     unlocked: false,
     completed: false,
+    timeLimit: 300,
     products: [
       { id: 'p1', name: '薯片大包', emoji: '🍟', weight: 150, isHot: true, isHeavy: false, category: 'snacks', maxStock: 4 },
       { id: 'p2', name: '可乐2L装', emoji: '🥤', weight: 2100, isHot: false, isHeavy: true, category: 'drinks', maxStock: 2 },
